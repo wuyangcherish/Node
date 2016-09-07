@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title><%= title%></title>
+<link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="stylesheets/style.css">
+</head>
+<body>
+	<div id="container" class="container">
+		<% if (locals.success) { %>
+			<div id="alt_success" class="alert alert-success">
+				<%- success %>
+			</div>
+		<% } %>
+		<% if (locals.error) { %>
+			<div id="alt_error" class="alert alert-warning">
+				<%- error %>
+			</div>
+		<% } %>
+
+		<form action="" class="form-signin" role='form' method="post">
+			<h2 class="form-signin-heading">登录</h2>
+			<input type="text" id="txtUserName" name="textUserName" class="form-control" placeholder="用户名" required autofocus />
+			<input type="password" id="txtUserPwd" name="textUserPwd" class="form-control" 
+            placeholer='密码' required />
+			<label for="" class="checkbox">
+				<input type="checkbox" id="chbRem" value="remember-me" 
+				name='chbRem' />记住密码
+			</label>
+			<button id="brnSub" class="btn btn-primary" type='submit'>登 录</button>
+			<a href="/reg" class="btn btn-link" role='button'>注 册</a>
+		</form>
+	</div>
+</body>
+</html>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+<script type="text/javascript">
+	String.prototype.format = function (args) {
+        var result = this;
+        if (arguments.length > 0) {
+            if (arguments.length == 1 && typeof (args) == "object") {
+                for (var key in args) {
+                    if (args[key] != undefined) {
+                        var reg = new RegExp("({" + key + "})", "g");
+                        result = result.replace(reg, args[key]);
+                    }
+                }
+            }
+            else {
+                for (var i = 0; i < arguments.length; i++) {
+                    if (arguments[i] != undefined) {
+                        var reg = new RegExp("({)" + i + "(})", "g");
+                        result = result.replace(reg, arguments[i]);
+                    }
+                }
+            }
+        }
+        return result;
+    }
+    $(function(){
+    	$('#btnSub').on('click', function(){
+    		var $txtUserName = $('#txtUserName');
+    		var txtUserNameVal = $.trim($txtUserName.val());
+    		var $txtUserPwd = $('#txtUserPwd');
+    		var txtUserPwdVal = $.trim($txtUserPwd.val());
+
+    		$("#errorTip,#alt_warning").remove();
+
+    		if(txtUserNameVal.length == 0){
+    			$('#container').prepend(errorTip.format('用户名不能为空'));
+    			$txtUserName.focus();
+    			return false;
+    		}
+
+    		if(txtUserPwdVal.length == 0){
+    			$('#container').prepend(errorTip.format('密码不能为空'));
+    			$txtUserPwd.focus();
+    			return false;
+    		}
+
+    		return true;
+    	})
+    })
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

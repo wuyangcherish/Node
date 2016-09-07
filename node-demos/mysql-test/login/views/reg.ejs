@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title><%= title %></title>
+<link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="stylesheets/style.css">
+</head>
+<body>
+	<div id="container" class="container">
+		<% if(locals.success) { %>
+			<div id="alt_success" class="alert alert-success">
+				<%- success %>
+			</div>
+		<% } %>
+		<% if(locals.error) { %>
+			<div id="alt_warning" class="alert alert-warning">
+				<%= error%>
+			</div>
+		<% } %>
+	
+		<form action="" class="from-signin" role="form" method="post">
+			<h2 class="form-signin-heading">注册</h2>
+
+			<input type="text" id="txtUserName" name="textUserName" class="form-control" placeholder="用户名" required />
+			<input type="password" id="txtUserPwd" name="textUserPwd" class="form-control" placeholder="密码" required />
+			<input type="password" id="txtUserRePwd" name="textUserRePwd" class="form-control" placeholder="重复密码" required/>
+
+			<button id="btnSub" class="btn btn-primary" type="submit">注册</button>
+			<a href="/login" role='button' class="btn btn-link">登 录</a>
+		</form>
+
+	</div>
+</body>
+</html>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+
+<script type="text/javascript">
+	String.prototype.format = function(args){
+		var result = this;
+		if(arguments.length >0 ){
+			for(var key in args){
+				if(args[key] != undefined){
+					var reg =new RegExp("({" + key + "})", "g");
+					result = result.replace(reg,args[key]);
+				}
+			}
+		}else{
+			for(var i =0;i<arguments.length;i++){
+				if(arguments[i] != undefined){
+					var reg =  new RegExp("({)" + i + "(})", "g");
+					result = result.replace(reg,arguments[i])
+				}
+			}
+		}
+		return result;
+	}
+
+	$(function(){
+		$('#btnSub').on('click', function(){
+			var $txtUserName = $("#txtUserName");
+			var txtUserNameVal = $.trim($txtUserName.val());
+
+			var $txtUserPwd = $("#txtUserPwd");
+			var txtUserPwdVal = $.trim($txtUserPwd.val());
+
+			var $txtUserRePwd = $("#txtUserRePwd");
+			var txtUserRePwdVal = $.trim($txtUserRePwd);
+
+			var errorTip = '<div id="errorTip" class="alert alert-warning">{0}</div>';
+
+			$('#errorTip,#alt_success,#alt_warning').remove();
+
+			if(txtUserNameVal.length == 0){
+				$('#container').prepend(errorTip,format("用户名不能为空"))
+			}
+
+			if(txtUserPwdVal.length == 0)
+            {                
+                $("#container").prepend(errorTip.format('密码不能为空'));
+                $txtUserPwd.focus();
+                return false;
+            }
+
+            if(txtUserRePwdVal.length == 0)
+            {
+                $("#container").prepend(errorTip.format('重复密码不能为空'));                
+                $txtUserRePwd.focus();
+                return false;
+            }
+
+            if(txtUserPwdVal != txtUserRePwdVal)
+            {                 
+                 $("#container").prepend(errorTip.format('两次密码不一致'));      
+                 $txtUserPwd.focus();
+                 return false;
+            }
+
+            return true;
+		})
+	})
+</script>
+
+
+
+
+
+
+
+
+
+
+
+

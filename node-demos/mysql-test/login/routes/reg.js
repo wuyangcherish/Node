@@ -1,0 +1,68 @@
+
+//实现注册功能
+
+var express = require('express');
+var router = express.Router();
+var User = require('../models/user.js');
+var crypto = require('crypto'); 
+var TITLE_REG = '注册';
+
+router.get('/', function(req,res){
+	res.render('reg',{title: TITLE_REG});
+})
+
+router.post('/', function(req,res){
+	console.log("post start..")
+	var userName = req.body['textUserName'];
+	var userPwd= req.body['textUserPwd'];
+	var userRePwd = req.body['textUserRePwd'];
+	var md5 = crypto.createHash('md5');
+	userPwd = md5.update(userPwd).digest('hex');
+	var newUser = new User({
+		username: userName,
+		userpass: userPwd
+	})
+
+	// console.log(newUser)
+	User.getUserNumByName(newUser.username,function(err,results){
+		//第一次的话返回：null [ RowDataPacket { num: 0 } ]
+		if(results != null && results[0]['num'] >0){
+			err = '用户名已存在'
+		}
+		if(err){
+			res.locals.error = err;
+			res.render('reg',{title:TITLE_REG});
+			return;
+		}
+		//这里面显示的是
+		newUser.save(function(err,result){
+			if(err){
+				res.locals.error = err;
+				res.render('reg',{title:TITLE_REG});
+				return;
+			}
+			if(result.insertId > 0)
+	        {
+	            res.locals.success = '注册成功,请点击   <a class="btn btn-link" href="/login" role="button"> 登录 </a>' ;
+	        }
+	          else
+	        {
+	            res.locals.error = err;
+	        }
+	         
+	        res.render('reg', { title: TITLE_REG });
+
+		})
+	});
+});
+	
+module.exports = router;
+
+
+
+
+
+
+
+
+

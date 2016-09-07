@@ -1,0 +1,12 @@
+.container{
+	width:300px;
+	padding:50px;
+	margin:0 auto;
+}
+.form-control{
+	margin-top:20px;
+	max-width:200px;
+}
+.btn{
+	margin-top:20px;
+}
